@@ -23,6 +23,12 @@ def levenshtein(s1, s2):
 
     return previous_row[-1]
 
+def isInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--route", help="route for the bus", type=str)
@@ -37,14 +43,15 @@ if args.route != None:
     routeSet = True
     firstAttempt = True
 if args.stop != None:
-    stopSet = True;
+    stopSet = True
 
 secondAttempt = False
 
 
 mainSite = "http://ucsdbus.com"
-f = urllib.urlopen(mainSite + "/simple/routes");
+f = urllib.urlopen(mainSite + "/simple/routes")
 soup = BeautifulSoup(f)
+os.system('clear')
 
 while True:
     items = list(enumerate(soup.find_all('li')))
@@ -76,16 +83,20 @@ while True:
         if rawInput == "q":
             break
 
+    os.system('clear')
+
+    if not isInt(rawInput):
+        print("Please enter a valid number.")
+        continue
+
     inputItem = int(rawInput)
     if inputItem >= len(items) or inputItem < 0:
-        os.system('clear')
         print("Please choose a valid option.")
-        continue;
+        continue
 
     _, choice = items[inputItem]
 
-    os.system('clear')
     print("You chose: %s" % choice.get_text().strip('\r\n'))
 
-    f = urllib.urlopen(mainSite + choice.find('a')['href']);
+    f = urllib.urlopen(mainSite + choice.find('a')['href'])
     soup = BeautifulSoup(f)
