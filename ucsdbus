@@ -98,5 +98,8 @@ while True:
 
     print("You chose: %s" % choice.get_text().strip('\r\n'))
 
-    f = urllib.urlopen(mainSite + choice.find('a')['href'])
-    soup = BeautifulSoup(f)
+    #check if there is a link
+    link = choice.find('a')
+    if link != None:
+        f = urllib.urlopen(mainSite + link['href'])
+        soup = BeautifulSoup(f)
